@@ -5,7 +5,7 @@ import { Mutation, Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/"
+  uri: "http://0449e1e4.ngrok.io"
 });
 
 const getMessages = gql`
@@ -26,7 +26,6 @@ function App() {
   let input;
   return (
     <div className="App">
-      <div style={{height: '700px'}}>
       <Query client={client} query={getMessages} pollInterval={500}>
         {
           ({loading, error, data}) => {
@@ -43,7 +42,6 @@ function App() {
           }
         }
       </Query>
-      </div>
       <Mutation mutation={createMessage} client={client}>
         {
           (createMessage) => {
