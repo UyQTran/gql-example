@@ -1,10 +1,8 @@
 import React from 'react';
 import './App.css';
-import { TextField } from '@material-ui/core';
 import ApolloClient from "apollo-boost";
 import { Mutation, Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import Button from '@material-ui/core/Button';
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/"
@@ -29,7 +27,7 @@ function App() {
   return (
     <div className="App">
       <div style={{height: '700px'}}>
-      <Query client={client} query={getMessages}>
+      <Query client={client} query={getMessages} pollInterval={500}>
         {
           ({loading, error, data}) => {
             if(loading) return <span>Loading...</span>;
