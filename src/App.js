@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
 import ApolloClient from "apollo-boost";
-import { Mutation, Query } from 'react-apollo';
+import { ApolloProvider, Mutation, Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
 
 const client = new ApolloClient({
-  uri: "http://0449e1e4.ngrok.io"
+  uri: "http://localhost:4000/"
 });
 
 const getMessages = gql`
@@ -25,47 +25,49 @@ const createMessage = gql`
 function App() {
   let input;
   return (
-    <div className="App">
-      <Query client={client} query={getMessages} pollInterval={500}>
-        {
-          ({loading, error, data}) => {
-            if(loading) return <span>Loading...</span>;
-            if(error) return <span>Something bad happened...</span>;
+    <ApolloProvider client={client}>
+      <div className="App">
+        <Query query={getMessages} pollInterval={500}>
+          {
+            ({loading, error, data}) => {
+              if(loading) return <span>Loading...</span>;
+              if(error) return <span>Something bad happened...</span>;
 
-            return (
-              <div style={{display: 'flex', flexDirection: 'column'}}>
-                {data.getMessages.map((message) => (
-                  <span>{message.text}</span>
-                ))}
-              </div>
-            );
+              return (
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                  {data.getMessages.map((message) => (
+                    <span>{message.text}</span>
+                  ))}
+                </div>
+              );
+            }
           }
-        }
-      </Query>
-      <Mutation mutation={createMessage} client={client}>
-        {
-          (createMessage) => {
+        </Query>
+        <Mutation mutation={createMessage}>
+          {
+            (createMessage) => {
 
-            return (
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  createMessage({ variables: { message: input.value } });
-                  input.value = "";
-                }}
-              >
-                <input
-                  ref={node => {
-                    input = node;
+              return (
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    createMessage({ variables: { message: input.value } });
+                    input.value = "";
                   }}
-                />
-                <button type="submit">Send</button>
-              </form>
-            );
+                >
+                  <input
+                    ref={node => {
+                      input = node;
+                    }}
+                  />
+                  <button type="submit">Send</button>
+                </form>
+              );
+            }
           }
-        }
-      </Mutation>
-    </div>
+        </Mutation>
+      </div>
+    </ApolloProvider>
   );
 }
 
