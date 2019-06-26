@@ -5,7 +5,7 @@ import { ApolloProvider, Mutation, Query } from 'react-apollo';
 import { gql } from 'apollo-boost';
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/"
+  uri: "http://20846f19.ngrok.io"
 });
 
 const getMessages = gql`
@@ -27,7 +27,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <Query query={getMessages} pollInterval={500}>
+        <Query query={getMessages} pollInterval={100}>
           {
             ({loading, error, data}) => {
               if(loading) return <span>Loading...</span>;
